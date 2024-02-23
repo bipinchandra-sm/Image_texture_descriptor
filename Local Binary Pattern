@@ -1,0 +1,50 @@
+Description: Local Binary Pattern (LBP) is a texture descriptor used in computer vision and image analysis to characterize the local patterns and textures in digital images. It is a simple yet effective method for texture classification, face recognition, and object detection. LBP is a versatile texture descriptor that characterizes local patterns in images by comparing the pixel intensities in a circular neighborhood. Its simplicity, computational efficiency, and ability to capture texture information make it a popular choice for a wide range of computer vision tasks.
+
+Some key properties and advantages:
+	LBP is very simple and efficient to compute.
+	It is invariant to monotonic gray-level changes, meaning it is robust to illumination/lighting changes.
+	The LBP histogram encodes both structural and statistical texture information.
+	LBP has proven very effective for texture classification tasks.
+
+Python code:
+ # import OpenCV library for computer vision
+import cv2             	 
+# import NumPy for numerical operations
+import numpy as np      
+# import Matplotlib for plotting
+import matplotlib.pyplot as plt 
+# Google Colab-specific function to display images
+from google.colab.patches import cv2_imshow 
+
+# Define the path to the input image
+image_path = input_image.jpg'  # Replace with the actual path to your image
+
+# Read the input image in grayscale
+img = cv2.imread(image_path, 0)
+cv2_imshow(img)  # Display the grayscale image using cv2_imshow
+
+# Compute the Local Binary Pattern (LBP) of the image
+radius = 2  			# Radius for LBP calculation
+n_points = 8 * radius  		# Number of sampling points
+lbp = np.zeros_like(img)  	# Create an empty image to store LBP values
+
+# Loop through each pixel in the image
+for i in range(radius, img.shape[0] - radius):
+    for j in range(radius, img.shape[1] - radius):
+        center = img[i, j]  	# Get the pixel value at the center
+        val = 0 			 # Initialize the LBP value for this pixel
+        for n in range(n_points):
+            # Calculate the coordinates of the sampling points in a circular pattern
+            x = i + int(radius * np.cos(2 * np.pi * n / n_points))
+            y = j - int(radius * np.sin(2 * np.pi * n / n_points))
+            
+            # Compare the pixel value of the sampling point with the center pixel
+            if img[x, y] >= center:
+                val += 1 << n  	# Update the LBP value based on the comparison result
+        
+        lbp[i, j] = val  		# Store the computed LBP value in the output image
+
+cv2_imshow(lbp)  		# Display the LBP image using cv2_imshow
+
+# Save the LBP image to an output file
+cv2.imwrite("output_image.jpg", lbp)
